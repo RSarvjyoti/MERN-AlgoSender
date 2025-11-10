@@ -141,15 +141,6 @@ The frontend will run on `http://localhost:5173` by default.
 2. Use the form to send ALGO on TestNet.
 3. View transaction history on the Transactions page.
 
----
-
-## Project Structure
-
-```
-MERN-AlgoSender/
-  frontend/    # React + Vite app
-  server/      # Express + MongoDB + Algorand SDK
-```
 
 ---
 
