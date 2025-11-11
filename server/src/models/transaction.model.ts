@@ -1,14 +1,56 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-const transactionSchema = new mongoose.Schema({
-  txId: String,
-  from: String,
-  to: String,
-  amount: Number,
-  status: String,
-  note: String,
-  createdAt: { type: Date, default: Date.now },
-  confirmedRound: Number,
+interface ITransaction extends Document {
+  txId: string;
+  from: string;
+  to: string;
+  amount: number;
+  status: "pending" | "confirmed" | "failed";
+  note?: string;
+  confirmedRound?: number;
+  createdAt: Date;
+}
+
+const transactionSchema = new Schema<ITransaction>({
+  txId: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+  },
+  from: {
+    type: String,
+    required: true,
+  },
+  to: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "confirmed", "failed"],
+    default: "pending",
+  },
+  note: {
+    type: String,
+    default: "",
+  },
+  confirmedRound: {
+    type: Number,
+    default: null,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    index: true,
+  },
 });
 
-export const Transaction = mongoose.model("Transaction", transactionSchema);
+const Transaction = mongoose.model<ITransaction>("Transaction", transactionSchema);
+
+export default Transaction;

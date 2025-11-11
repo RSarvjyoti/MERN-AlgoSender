@@ -7,8 +7,8 @@ import algorandRoutes from "./routes/algorand.routes";
 config();
 connectDB()
 const app = express();
+
 app.use(cors());
-const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 app.get('/', (req : Request, res : Response):void => {
@@ -16,6 +16,8 @@ app.get('/', (req : Request, res : Response):void => {
 })
 
 app.use('/api/algorand', algorandRoutes);
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, ():void => {
-    console.log(`Server is runing at http://localhost:${PORT}`);
+    console.log(`Server is running at http://localhost:${PORT}`);
 })
