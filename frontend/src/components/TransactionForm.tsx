@@ -5,6 +5,7 @@ export default function TransactionForm() {
   const [mnemonic, setMnemonic] = useState("");
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
+  const [note, setNote] = useState("");
   const [response, setResponse] = useState<any>(null);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,8 +16,14 @@ export default function TransactionForm() {
         mnemonic,
         to,
         amount,
+        note,
       });
       setResponse(res.data);
+      // Clear form after success
+      setMnemonic("");
+      setTo("");
+      setAmount("");
+      setNote("");
     } catch (err: any) {
       alert(err.response?.data?.error || "Error sending transaction");
     }
@@ -44,8 +51,17 @@ export default function TransactionForm() {
           value={amount}
           onChange={e => setAmount(e.target.value)}
           className="border border-gray-400 bg-gray-50 p-4 mb-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-700 transition w-full text-gray-900"
+          type="number"
+          step="0.001"
+        />
+        <input
+          placeholder="Transaction Note (optional)"
+          value={note}
+          onChange={e => setNote(e.target.value)}
+          className="border border-gray-400 bg-gray-50 p-4 mb-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-700 transition w-full text-gray-900"
         />
         <button
+          type="submit"
           className="bg-black text-white font-semibold py-3 px-6 mt-2 rounded-xl shadow-lg hover:bg-gray-800 transition-all duration-200 w-full"
         >
           Send
@@ -55,7 +71,9 @@ export default function TransactionForm() {
       {response && (
         <div className="mt-6 p-4 rounded-xl bg-gray-100 border border-gray-300 shadow">
           <p className="font-semibold text-gray-900"><strong>Transaction ID:</strong> {response.txId}</p>
-          <p className="text-gray-800">Status: {response.transaction.status}</p>
+          <p className="text-gray-800"><strong>Status:</strong> {response.transaction.status}</p>
+          <p className="text-gray-800"><strong>From:</strong> {response.transaction.from}</p>
+          <p className="text-gray-800"><strong>Amount:</strong> {response.transaction.amount} ALGO</p>
         </div>
       )}
     </div>
