@@ -21,8 +21,14 @@ export default function Transactions() {
   useEffect(() => {
     axios
       .get(`${API_BASE_URL}/api/algorand/transactions`)
-      .then((res) => setTransactions(res.data))
-      .catch((err) => console.error(err))
+      .then((res) => {
+        const data = res.data.transactions || res.data;
+        setTransactions(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        console.error("Error fetching transactions:", err);
+        setTransactions([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
